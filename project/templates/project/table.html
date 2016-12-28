@@ -11,7 +11,7 @@
     {% endif %}
     <div>
         {% if image_file %}
-        <img src="{% static image_file  %}" width="20%" onclick="self.location='edit_image?username={{ user_test }}&image_file={{ image_file }}'">
+        <img src="{% static image_file  %}" height="20%" onclick="self.location='edit_image?username={{ user_test }}&image_file={{ image_file }}'">
         {% endif %}
         <h1>{{ user_test }}</h1>
         <div id="gender">

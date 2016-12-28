@@ -216,7 +216,13 @@ def Upload_image(request):
 	image.name = '%s.%s'%(username,image.name.split('.')[-1])
 	user_image = User_image.objects.create(username=username,image=image)
 	user_image.save()
-	return redirect('/staff_right?user=%s'%(username))
+	if str(request.user.groups.all()[0]) == 'staff':
+		return redirect('/staff_right?user=%s'%(username))
+	else :
+		return redirect('/index')
+	
+	
+	
 
 def Api(request):
 	username = request.GET.get('username','')

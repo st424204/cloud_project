@@ -97,11 +97,14 @@ def Index(request):
 						'is_user' : 1,
 					})
 				else :
+					image_file = 'image/default.jpg'
+					if User_image.objects.filter().exists():
+						image_file = 'image/%s' % (str(User_image.objects.filter(username=request.user.username)[0].image).split('/')[-1])
 					return render(request, 'project/table.html',{
 						'table': data,
 						'user_test': request.user.username,
 						'gender' : 'male',
-						'image_file': 'image/default.jpg',
+						'image_file': image_file,
 						'is_user' : 1,
 					})
 

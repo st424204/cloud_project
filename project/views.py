@@ -164,14 +164,14 @@ def Staff_right(request):
 	user = request.GET.get('user',None)
 	if user is None :
 		return render(request, 'project/empty_table.html')
-	gender = '女'
+	gender = 'female'
 	if Measuring_data.objects.filter(email=user).__len__() == 0:
 		return render(request, 'project/empty_table.html')
 	else :
 		if Measuring_data.objects.filter(email=user) and Measuring_data.objects.filter(email=user)[0].gender == 'male':
-			gender='男'
+			gender='male'
 		image_file = 'image/default.jpg'
-		if gender=='女':
+		if gender=='female':
 			image_file = 'image/default_female.jpg'
 
 		if User_image.objects.filter(username=user).exists():

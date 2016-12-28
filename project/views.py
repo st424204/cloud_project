@@ -87,7 +87,7 @@ def Index(request):
 				data = Measuring_data.objects.filter(email=request.user.username)
 				if data.__len__() :
 					image_file = 'image/default.jpg'
-					if User_image.objects.filter().exists():
+					if User_image.objects.filter(username=request.user.username).exists():
 						image_file = 'image/%s' % (str(User_image.objects.filter(username=request.user.username)[0].image).split('/')[-1])
 					return render(request, 'project/table.html',{
 						'table': data,
@@ -98,7 +98,7 @@ def Index(request):
 					})
 				else :
 					image_file = 'image/default.jpg'
-					if User_image.objects.filter().exists():
+					if User_image.objects.filter(username=request.user.username).exists():
 						image_file = 'image/%s' % (str(User_image.objects.filter(username=request.user.username)[0].image).split('/')[-1])
 					return render(request, 'project/table.html',{
 						'table': data,

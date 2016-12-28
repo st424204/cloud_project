@@ -202,9 +202,17 @@ def Download(request):
 def Edit_image(request):
 	image_file = request.GET.get('image_file','')
 	username = request.GET.get('username','')
+	href = ''
+	if str(request.user.groups.all()[0]) == 'staff':
+		href = '/staff_right?user=%s'%(username)
+	else :
+		href = '/index'
+	
 	return render(request,'project/upload_image.html',{
 		'username':username,
-		'image_file':image_file,})
+		'image_file':image_file,
+		'href':href,
+		})
 
 def Upload_image(request):
 	image = request.FILES.get('image', None)

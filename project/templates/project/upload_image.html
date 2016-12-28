@@ -139,13 +139,13 @@
 <body>
     {% load static %}
     <form action="upload_image" method="post" enctype="multipart/form-data">
-		<h1>title</h1>
+		<h1>Upload photo</h1>
         {% csrf_token %}
         Username:<input type="text" name="username" value="{{ username }}" readonly="readonly"><br>
         上傳圖片:<input type="file" name="image" id="image" multiple="multiple">
         <img src={% static image_file  %} id="img0" width="400">
 	    <input type="submit" value="提交">
-        <a href="/index"><input type="button" value="取消"></a>
+        <a href={{href}}><input type="button" value="取消"></a>
 
     </form>
     <script>

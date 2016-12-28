@@ -97,7 +97,13 @@ def Index(request):
 						'is_user' : 1,
 					})
 				else :
-					return render(request, 'project/empty_table.html')
+					return render(request, 'project/table.html',{
+						'table': data,
+						'user_test': request.user.username,
+						'gender' : 'male',
+						'image_file': 'image/default.jpg',
+						'is_user' : 1,
+					})
 
 		else:
 			return render(request,'project/login.html')

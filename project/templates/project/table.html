@@ -48,15 +48,15 @@
 					<td>員工</td>
 				{% endif %}
 				<td>{{ attr.age }}</td>
-                <td>{{ attr.height }}</td>
-                <td>{{ attr.weight }}</td>
+                <td>{{ attr.height }} cm</td>
+                <td>{{ attr.weight }} kg</td>
                 {% if attr.stomach == "full" %}
 					<td>飽腹</td>
 				{% else %}
 					<td>空腹</td>
 				{% endif %}
-                <td>{{ attr.avg_ex_hour }}</td>
-                <td>{{ attr.avg_sleep_hour }}</td>
+                <td>{{ attr.avg_ex_hour }} hr</td>
+                <td>{{ attr.avg_sleep_hour }} hr</td>
                 <td>{{ attr.mood }}</td>
                 <td><a href="download?file={{ attr.txt }}">{{ attr.datetime }}</a></td>
                 </tr>

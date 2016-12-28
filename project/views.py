@@ -223,6 +223,12 @@ def Edit_image(request):
 def Upload_image(request):
 	image = request.FILES.get('image', None)
 	username = request.POST.get('username', None)
+	if image is None :
+		if str(request.user.groups.all()[0]) == 'staff':
+			return redirect('/staff_right?user=%s'%(username))
+		else :
+			return redirect('/index')
+	
 	user_image = User_image.objects.filter(username=username)
 	if user_image.__len__():
 		user_image[0].image.storage.delete(user_image[0].image.path)

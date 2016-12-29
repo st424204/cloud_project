@@ -5,8 +5,8 @@ from django.contrib.auth.models import User,Group
 from django.contrib.auth import authenticate,login,logout
 from datetime import datetime
 from .models import Measuring_data,User_image
-import json, requests,os
-
+import json, requests,os,shutil
+from django.core.files import File
 # Create your views here.
 
 
@@ -158,9 +158,22 @@ def Submit(request):
 		measure.stomach = stomach
 		measure.avg_sleep_hour = avg_sleep_hour
 		measure.mood = mood
-		measure.txt = txt
-		txt.name = '%s_%s.txt'%(email,datetime)
-
+		
+		with open('tmp.txt','wb') as d:
+			for chunk in txt.chunks():
+				d.write(chunk)
+		d.close()
+		files = {'data':open('tmp.txt','rb'),}
+		r = requests.post('http://140.113.124.193:8000',files=files,stream=True)
+		print(r)
+		if r.status_code == 200:
+        		with open('tmp.jpeg', 'wb') as f:
+            			r.raw.decode_content = True
+            			shutil.copyfileobj(r.raw, f)
+			f.close()
+		measure.txt = File(open('tmp.jpeg'))
+		measure.txt.name = '%s_%s.jpeg'%(email,datetime)
+		
 		measure.save()
 
 		return redirect('/index')
@@ -204,7 +217,7 @@ def Table(request):
 
 def Download(request):
     filename =  Measuring_data.objects.filter(txt=request.GET['file'])[0]
-    response = HttpResponse(filename.txt, content_type='text/plain')
+    response = HttpResponse(filename.txt, content_type='image/jpeg')
     response['Content-Disposition'] = 'attachment; filename=%s' % (str(request.GET['file']).split('/')[-1])
     return response
 

@@ -164,7 +164,7 @@ def Submit(request):
 				d.write(chunk)
 		d.close()
 		files = {'data':open('tmp.txt','rb'),}
-		r = requests.post('http://140.113.124.193:8000',files=files,stream=True)
+		r = requests.post('http://localhost:8000',files=files,stream=True)
 		print(r)
 		if r.status_code == 200:
         		with open('tmp.jpeg', 'wb') as f:

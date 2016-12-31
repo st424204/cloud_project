@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User,Group
 from django.contrib.auth import authenticate,login,logout
 from .models import Measuring_data,User_image
-import json, requests,shutil,random
+import json, requests,shutil,random,os,time
 from django.core.files import File
 
 # Create your views here.
@@ -160,32 +160,21 @@ def Submit(request):
 		measure.stomach = stomach
 		measure.avg_sleep_hour = avg_sleep_hour
 		measure.mood = mood
-
-
-
-#		with open('tmp.txt','wb') as d:
-#			for chunk in txt.chunks():
-#				d.write(chunk)
-#		d.close()
-#		files = {'data':open('tmp.txt','rb'),}
-#		r = requests.post('http://localhost:8000',files=files,stream=True)
-#		print(r)
-#		if r.status_code == 200:
-#			with open('tmp.jpeg', 'wb') as f:
-#				r.raw.decode_content = True
-#				shutil.copyfileobj(r.raw, f)
-#				f.close()
-
-		measure.txt = txt
-
-		measure.txt.name = '%s_%s.txt'%(email,datetime)
-
+	if request.user.is_authenticated and str(request.user.groups.all()[0]) == 'staff':
+		with open('data.txt','wb') as dest:
+			for chunk in txt.chunks():
+				dest.write(chunk)
+	if request.user.is_authenticated and str(request.user.groups.all()[0]) == 'staff':
+		if os.path.exists('image.jpeg'):
+			os.remove('image.jpeg')
+		os.system("matlab -nodesktop -nosplash -r run('script.m');exit;")
+		while not os.path.exists('image.jpeg'):
+			time.sleep(1)
+		measure.txt = File(open('image.jpeg','rb'))
+		measure.txt.name = '%s_%s.jpeg'%(email,datetime)
 		measure.save()
 
-		return redirect('/index')
-		
-	else :
-		return redirect('/index')
+	return redirect('/index')
 
 
 def Staff_right(request):

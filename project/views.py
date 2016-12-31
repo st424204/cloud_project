@@ -3,12 +3,14 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User,Group
 from django.contrib.auth import authenticate,login,logout
-from datetime import datetime
 from .models import Measuring_data,User_image
-import json, requests,os,shutil
+import json, requests,shutil,random
 from django.core.files import File
+
 # Create your views here.
 
+
+default_image = ['default.png','defaults.jpg','default.jpg']
 
 def Index(request):
 	if request.POST.get('register',None):		
@@ -32,7 +34,7 @@ def Index(request):
 						'staff': staff,
 						'user': user,
                 			})
-				elif account_type=='staff' and very != '123456789':
+				elif account_type=='staff' and very != 'jokeyouandhavefun':
 					return render(request, 'project/register.html', {
 						'error': 'Authentication Code Error',
 						'username': username,
@@ -86,7 +88,7 @@ def Index(request):
 			else :
 				data = Measuring_data.objects.filter(email=request.user.username)
 				if data.__len__() :
-					image_file = 'image/default.jpg'
+					image_file = 'image/%s'%(default_image[random.randint(0,2)])
 					if User_image.objects.filter(username=request.user.username).exists():
 						image_file = 'image/%s' % (str(User_image.objects.filter(username=request.user.username)[0].image).split('/')[-1])
 					return render(request, 'project/table.html',{
@@ -97,7 +99,7 @@ def Index(request):
 						'is_user' : 1,
 					})
 				else :
-					image_file = 'image/default.jpg'
+					image_file = 'image/%s'%(default_image[random.randint(0,2)])
 					if User_image.objects.filter(username=request.user.username).exists():
 						image_file = 'image/%s' % (str(User_image.objects.filter(username=request.user.username)[0].image).split('/')[-1])
 					return render(request, 'project/table.html',{
@@ -158,22 +160,26 @@ def Submit(request):
 		measure.stomach = stomach
 		measure.avg_sleep_hour = avg_sleep_hour
 		measure.mood = mood
-		
-		with open('tmp.txt','wb') as d:
-			for chunk in txt.chunks():
-				d.write(chunk)
-		d.close()
-		files = {'data':open('tmp.txt','rb'),}
-		r = requests.post('http://localhost:8000',files=files,stream=True)
-		print(r)
-		if r.status_code == 200:
-        		with open('tmp.jpeg', 'wb') as f:
-            			r.raw.decode_content = True
-            			shutil.copyfileobj(r.raw, f)
-			f.close()
-		measure.txt = File(open('tmp.jpeg'))
-		measure.txt.name = '%s_%s.jpeg'%(email,datetime)
-		
+
+
+
+#		with open('tmp.txt','wb') as d:
+#			for chunk in txt.chunks():
+#				d.write(chunk)
+#		d.close()
+#		files = {'data':open('tmp.txt','rb'),}
+#		r = requests.post('http://localhost:8000',files=files,stream=True)
+#		print(r)
+#		if r.status_code == 200:
+#			with open('tmp.jpeg', 'wb') as f:
+#				r.raw.decode_content = True
+#				shutil.copyfileobj(r.raw, f)
+#				f.close()
+
+		measure.txt = txt
+
+		measure.txt.name = '%s_%s.txt'%(email,datetime)
+
 		measure.save()
 
 		return redirect('/index')
@@ -192,9 +198,7 @@ def Staff_right(request):
 	else :
 		if Measuring_data.objects.filter(email=user) and Measuring_data.objects.filter(email=user)[0].gender == 'male':
 			gender='male'
-		image_file = 'image/default.jpg'
-		if gender=='female':
-			image_file = 'image/default_female.jpg'
+		image_file = 'image/%s'%(default_image[random.randint(0,2)])
 
 		if User_image.objects.filter(username=user).exists():
 			image_file = 'image/%s'%(str(User_image.objects.filter(username=user)[0].image).split('/')[-1])

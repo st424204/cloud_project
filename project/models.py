@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 
 def user_directory_path(instance, filename):
-    return './project/user_{0}/{1}'.format(instance.email,filename)
+    return './project/userdata/user_{0}/{1}'.format(instance.email,filename)
 def user_directory_iamgepath(instance, filename):
     return './project/static/image/{0}'.format(filename)
 

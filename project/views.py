@@ -170,6 +170,8 @@ def Submit(request):
 		os.system("matlab -nodesktop -nosplash -r run('script.m');exit;")
 		while not os.path.exists('image.jpeg'):
 			time.sleep(1)
+		measure.txt.name = '%s_%s.jpeg' % (email, datetime)
+
 		measure.txt = File(open('image.jpeg','rb'))
 		measure.txt.name = '%s_%s.jpeg'%(email,datetime)
 		measure.save()

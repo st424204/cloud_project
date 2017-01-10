@@ -58,7 +58,7 @@
                 <td>{{ attr.avg_ex_hour }} hr</td>
                 <td>{{ attr.avg_sleep_hour }} hr</td>
                 <td>{{ attr.mood }}</td>
-                <td><a href="download?file={{ attr.txt }}" Target="external" onclick="window.open('download?file={{ attr.txt }}', 'external', 'width=600,height=400,left=320,top=50')">{{ attr.datetime }}</a><!--image src="download?file={{ attr.txt }}"--></td>
+                <td><a href="download?file={{ attr.txt }}" Target="external" onclick="window.open('download?file={{ attr.txt }}', 'external', 'left=320,top=50')">{{ attr.datetime }}</a><!--image src="download?file={{ attr.txt }}"--></td>
                 </tr>
             {% endfor %}
     </table>
